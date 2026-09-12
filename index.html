@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0d0f13">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Отопление и вода">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" type="image/png" sizes="64x64" href="icon-64.png">
+<link rel="apple-touch-icon" href="icon-180.png">
+<title>Калькулятор системы отопления и водоснабжения</title>
+<link rel="stylesheet" href="оболочка.css">
+<link rel="stylesheet" href="calc.css">
+</head>
+<body>
+
+<!-- Splash -->
+<div class="splash" id="splash">
+  <div class="spl-dot"></div>
+  <p class="spl-title">BELYAEV_PROJECT</p>
+</div>
+
+<!-- Offline banner -->
+<div class="offline-banner" id="offB">Нет соединения с интернетом</div>
+
+<div class="app">
+
+  <header>
+    <p class="eye">BELYAEV_PROJECT</p>
+    <h1>Калькулятор системы отопления и водоснабжения</h1>
+  </header>
+
+  <svg class="wire" viewBox="0 0 600 10" preserveAspectRatio="none">
+    <path d="M0 5 H140 L155 0 L170 10 L185 0 L200 10 L215 0 L230 10 L245 0 L260 10 H600" stroke="rgba(245,180,0,.5)" stroke-width="2" fill="none"/>
+  </svg>
+
+  <!-- ========== Страница: Расчёт ========== -->
+  <main id="pgCalc" class="pg a">
+
+    <div class="pnl">
+      <label class="f-label">Данные клиента</label>
+      <div class="frow2">
+        <div>
+          <label class="f-label">ФИО <b class="req">*</b></label>
+          <input class="qi" id="clFio" type="text" autocomplete="name" placeholder="Фамилия Имя Отчество">
+        </div>
+        <div>
+          <label class="f-label">Номер телефона <b class="req">*</b></label>
+          <input class="qi" id="clPhone" type="tel" inputmode="tel" autocomplete="tel" placeholder="+7 (___) ___-__-__">
+        </div>
+      </div>
+      <label class="f-label seg-lb">Адрес объекта <b class="req">*</b></label>
+      <input class="qi" id="clAddr" type="text" autocomplete="street-address" placeholder="Город, улица, дом">
+      <div class="hint">ФИО, телефон и адрес обязательны — без них смета не сохранится.</div>
+    </div>
+
+    <div class="pnl">
+      <label class="f-label">Связки</label>
+
+      <button class="bchip" id="bBoiler">Двухконтурный газовый котёл</button>
+      <button class="bchip" id="bBoiler1">Одноконтурный котёл + бойлер косвенного нагрева</button>
+
+      <div id="bbAreaBox" class="floor-pnl" style="display:none">
+        <div class="frow2">
+          <div>
+            <label class="f-label">Площадь дома (отапливаемая), м²</label>
+            <input class="qkin sm" id="bbArea" type="number" min="0" step="1" inputmode="decimal" placeholder="0">
+          </div>
+        </div>
+        <div class="hint" id="boilerInfo"></div>
+      </div>
+
+      <button class="bchip" id="bHeater">Бойлер косвенного нагрева</button>
+
+      <div id="hbAreaBox" class="floor-pnl" style="display:none">
+        <div class="frow2">
+          <div>
+            <label class="f-label">Объём бака, л</label>
+            <input class="qkin sm" id="hLitres" type="number" min="0" step="1" inputmode="numeric" placeholder="0">
+          </div>
+          <div>
+            <label class="f-label">Производитель</label>
+            <select class="qi" id="hMaker"></select>
+          </div>
+        </div>
+        <label class="f-label seg-lb">Тип бака</label>
+        <div class="seg seg2" id="segMat" data-k="0">
+          <span class="th"></span>
+          <button class="mbtn a" data-k="0">Нержавеющая сталь</button>
+          <button class="mbtn" data-k="1">Эмалированный</button>
+        </div>
+        <div class="hint" id="heaterInfo"></div>
+      </div>
+
+      <button class="bchip" id="bHamam">Хамам (турецкая парная)</button>
+
+      <button class="bchip" id="bWater">Водоснабжение</button>
+
+      <div id="wAreaBox" class="floor-pnl" style="display:none">
+        <div class="frow2">
+          <div>
+            <label class="f-label">Площадь дома (отапливаемая), м²</label>
+            <input class="qkin sm" id="wArea" type="number" min="0" step="1" inputmode="decimal" placeholder="0">
+          </div>
+          <div>
+            <label class="f-label">Этажность</label>
+            <select class="qi" id="wFloors">
+              <option value="1">1 этаж</option>
+              <option value="2" selected>2 этажа</option>
+              <option value="3">3 этажа</option>
+            </select>
+          </div>
+        </div>
+        <div class="frow2">
+          <div>
+            <label class="f-label">Кол-во жильцов</label>
+            <input class="qkin sm" id="wPeople" type="number" min="0" step="1" inputmode="numeric" placeholder="4">
+          </div>
+          <div>
+            <label class="f-label">Санузлы</label>
+            <input class="qkin sm" id="wBath" type="number" min="0" step="1" inputmode="numeric" placeholder="2">
+          </div>
+          <div>
+            <label class="f-label">Кухни</label>
+            <input class="qkin sm" id="wKit" type="number" min="0" step="1" inputmode="numeric" placeholder="1">
+          </div>
+        </div>
+        <div class="frow2">
+          <div>
+            <label class="f-label">Источник воды</label>
+            <select class="qi" id="wSrc">
+              <option value="well" selected>Скважина</option>
+              <option value="municipal">Централизованное</option>
+              <option value="well_tank">Скважина + гидроаккумулятор</option>
+            </select>
+          </div>
+        </div>
+        <div id="wWellBox" class="frow2">
+          <div>
+            <label class="f-label">Глубина скважины, м</label>
+            <input class="qkin sm" id="wDepth" type="number" min="0" step="1" inputmode="numeric" placeholder="40">
+          </div>
+          <div>
+            <label class="f-label">Высота подъёма, м</label>
+            <input class="qkin sm" id="wLift" type="number" min="0" step="1" inputmode="numeric" placeholder="8">
+          </div>
+        </div>
+        <div class="frow2">
+          <div>
+            <label class="f-label">Фильтрация</label>
+            <select class="qi" id="wFilt">
+              <option value="basic" selected>Базовая (грязевик + магнит)</option>
+              <option value="full">Полная (3 ступени + осмос)</option>
+              <option value="none">Без фильтров</option>
+            </select>
+          </div>
+        </div>
+        <div class="hint" id="waterInfo"></div>
+      </div>
+
+      <div class="bsep"></div>
+
+      <label class="f-label">BELYAEV_PROJECT</label>
+      <div class="seg seg2" id="segSys" data-k="0">
+        <span class="th"></span>
+        <button class="mbtn a" data-k="0">Радиаторы</button>
+        <button class="mbtn" data-k="1">Тёплый пол</button>
+      </div>
+
+      <div id="floorPnl" class="floor-pnl" style="display:none">
+        <div class="frow2">
+          <div>
+            <label class="f-label">Количество этажей</label>
+            <input class="qkin sm" id="bFloors" type="number" min="1" max="10" step="1" inputmode="numeric" value="1">
+          </div>
+          <div>
+            <label class="f-label">Помещений на этаже</label>
+            <input class="qkin sm" id="bRooms" type="number" min="1" step="1" inputmode="numeric" value="1">
+          </div>
+        </div>
+        <div id="floorsBox"></div>
+        <label class="chk" id="eppChk"><input type="checkbox" id="bEpp"> Утепление пола ЭПП 50 мм (лист 0,55×1,15 м)</label>
+        <div class="hint" id="floorInfo"></div>
+      </div>
+
+      <div id="radPnl" class="floor-pnl">
+        <div class="frow2">
+          <div>
+            <label class="f-label">Периметр дома, м</label>
+            <input class="qkin sm" id="bPerim" type="number" min="0" step="0.5" inputmode="decimal" placeholder="0">
+          </div>
+          <div>
+            <label class="f-label">Количество этажей в доме</label>
+            <input class="qkin sm" id="bRadFloors" type="number" min="1" max="10" step="1" inputmode="numeric" value="1">
+          </div>
+        </div>
+        <div id="radRoomsBox"></div>
+        <div id="radSummary"></div>
+        <label class="f-label">Производитель радиаторов</label>
+        <div class="seg seg2" id="segRad" data-k="0">
+          <span class="th"></span>
+          <button class="mbtn a" data-k="0">Stout TITAN</button>
+          <button class="mbtn" data-k="1">Рифар В</button>
+        </div>
+        <div class="hint" id="radInfo"></div>
+      </div>
+
+      <div id="bundWrap"></div>
+    </div>
+
+    <div class="cat">
+      <div class="cat-h" data-open="0"><h2>Расходники</h2><span class="arr">▾</span></div>
+      <div class="cat-b" id="rasBod">
+        <div id="rasRows"></div>
+        <div class="ctot"><span>Расходники</span><span class="a" id="cRas">0 ₽</span></div>
+      </div>
+    </div>
+
+    <div class="cat" id="wCat" style="display:none">
+      <div class="cat-h" data-open="0"><h2>Водоснабжение</h2><span class="arr">▾</span></div>
+      <div class="cat-b" id="wBod">
+        <div id="wRows"></div>
+      </div>
+    </div>
+
+    <div class="cat">
+      <div class="cat-h" data-open="0"><h2>Работа</h2><span class="arr">▾</span></div>
+      <div class="cat-b" id="workBod">
+        <div id="workRows"></div>
+        <div class="ctot"><span>Работа</span><span class="a" id="cWork">0 ₽</span></div>
+      </div>
+    </div>
+
+    <div class="totbox">
+      <div class="ctot"><span>Материалы</span><span class="a" id="gtMat">0 ₽</span></div>
+      <div class="ctot"><span>Работы</span><span class="a" id="gtWork">0 ₽</span></div>
+      <div class="gtot"><h2>Итого</h2><div class="a" id="gtVal">0 ₽</div></div>
+    </div>
+
+    <div class="acts">
+      <button class="btn bp" id="bSave">Сохранить</button>
+      <button class="btn bd bf" id="bGitSave">Сохранить + в репозиторий</button>
+      <button class="btn bs" id="bClear">Очистить</button>
+      <button class="btn bd bf" id="bPrint">Печать сметы</button>
+    </div>
+    <div class="hint git-hint">Кнопка «+ в репозиторий» отправляет смету (.xls) в указанный репозиторий на GitHub. Настройки — на странице «Справка».</div>
+  </main>
+
+  <!-- ========== Страница: Каталог ========== -->
+  <main id="pgCat" class="pg">
+    <div class="sw">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><line x1="16.5" y1="16.5" x2="21" y2="21"/></svg>
+      <input id="catS" type="text" placeholder="Поиск по каталогу…">
+    </div>
+    <div class="hint">Цены за шт · 1/2" · 3/4" · 1". Кнопка «+» добавляет позицию в расчёт.</div>
+    <div id="catWrap"></div>
+  </main>
+
+  <!-- ========== Страница: История ========== -->
+  <main id="pgHist" class="pg">
+    <div class="hacts">
+      <button class="btn bs" id="hClear">Очистить всё</button>
+      <button class="hback" id="hBack" style="display:none">← К списку расчётов</button>
+    </div>
+    <div id="hList"></div>
+    <div id="hDet" class="hdetail" style="display:none"></div>
+  </main>
+
+  <!-- ========== Страница: Справка ========== -->
+  <main id="pgHelp" class="pg">
+    <div class="pnl">
+      <p class="grpname">Резьба трубная цилиндрическая (G) · ГОСТ 6357-81</p>
+      <table class="ttable">
+        <tr><th>Резьба</th><th>Наружный Ø, мм</th><th>Внутренний Ø, мм</th><th>Шаг, мм</th><th>Нитей/дюйм</th></tr>
+        <tr><td><b>G 1/2"</b></td><td>20,955</td><td>18,631</td><td>1,814</td><td>14</td></tr>
+        <tr><td><b>G 3/4"</b></td><td>26,441</td><td>24,119</td><td>1,814</td><td>14</td></tr>
+        <tr><td><b>G 1"</b></td><td>33,249</td><td>30,291</td><td>2,309</td><td>11</td></tr>
+      </table>
+    </div>
+    <div class="pnl">
+      <p class="grpname">Правила подбора</p>
+      <ul class="tips">
+        <li>Кран с американкой (Ø 1/2", 3/4", 1") всегда комплектуется муфтой с наружной резьбой (НР) и муфтой с внутренней резьбой (ВР) того же диаметра.</li>
+        <li>Наружная резьба (НР) — резьба снаружи детали (труба, сгон); внутренняя резьба (ВР) — внутри муфты или угольника.</li>
+        <li>Американка (накидная гайка + прокладка) позволяет отключить кран, не вращая трубу.</li>
+        <li>Диаметр фитингов должен совпадать с диаметром резьбы крана.</li>
+        <li>Герметизация резьбы: лента ФУМ, уплотнительная нить или паста-герметик.</li>
+      </ul>
+    </div>
+    <div class="pnl">
+      <p class="grpname">Синхронизация смет с репозиторием GitHub</p>
+      <p class="hint">Сметы (.xls) сохраняются в ваш репозиторий-хранилище (папка smeti/). Токен хранится только на этом устройстве и никуда не отправляется, кроме GitHub API.</p>
+      <input class="qi" id="gitToken" type="password" placeholder="GitHub Personal Access Token (repo)">
+      <input class="qi" id="gitUser" type="text" placeholder="Имя пользователя GitHub">
+      <input class="qi" id="gitRepo" type="text" placeholder="Репозиторий для смет, напр. smeti-otoplenie">
+      <div class="hint" id="gitMsg"></div>
+    </div>
+  </main>
+
+</div>
+
+<!-- Footer -->
+<footer class="foot">
+  <p class="f-txt"><b>BELYAEV_PROJECT</b> — строительные калькуляторы в помощь профессионалам. Россия, г. Нижний Новгород, <a href="tel:+79875530961" class="f-tel">+7 987 553-09-61</a></p>
+</footer>
+
+<!-- Bottom navigation -->
+<nav class="bnav" id="bnav">
+  <a class="nbtn a" href="#calc" data-pg="calc">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><rect x="5" y="3" width="14" height="18" rx="2"/><line x1="9" y1="7" x2="15" y2="7"/></svg>
+    Расчёт
+  </a>
+  <a class="nbtn" href="#cat" data-pg="cat">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>
+    Каталог
+  </a>
+  <a class="nbtn" href="#hist" data-pg="hist">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="8.5"/><polyline points="12 7.5 12 12 15.5 14"/></svg>
+    История
+  </a>
+  <a class="nbtn" href="#help" data-pg="help">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="8.5"/><line x1="12" y1="11" x2="12" y2="16.5"/><circle cx="12" cy="8" r="0.2"/></svg>
+    Справка
+  </a>
+</nav>
+
+<!-- Install banner -->
+<div class="install-banner" id="instBanner">
+  <p>Установите калькулятор на главный экран — будет работать офлайн.</p>
+  <div class="row">
+    <button class="inst" id="bInstall">Установить</button>
+    <button class="inst2" id="bNoInstall">Не сейчас</button>
+  </div>
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+
+<script>/* placeholder — scraper.py will overwrite with live prices */ window.PRICES_LOCAL = null;</script>
+<script src="prices_local.js"></script>
+<script>/* placeholder — scraper.py writes boiler catalog + fixed kit prices */ window.BOILERS_LOCAL = null;</script>
+<script src="boilers_local.js"></script>
+<script src="app.js" defer></script>
+<script>
+if ('serviceWorker' in navigator && location.protocol.indexOf('http') === 0) {
+  navigator.serviceWorker.register('./service-worker.js').catch(function () {});
+}
+window.addEventListener('DOMContentLoaded', function () {
+  var ids = ['gitToken', 'gitUser', 'gitRepo'];
+  var keys = ['ov_gh_token', 'ov_gh_user', 'ov_gh_repo'];
+  ids.forEach(function (id, i) {
+    var el = document.getElementById(id);
+    if (!el) return;
+    el.value = localStorage.getItem(keys[i]) || '';
+    el.addEventListener('change', function () { localStorage.setItem(keys[i], this.value.trim()); });
+  });
+});
+</script>
+</body>
+</html>

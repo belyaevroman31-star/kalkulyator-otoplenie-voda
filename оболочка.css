@@ -1,0 +1,321 @@
+/* =========================================================
+   Shell & Styles for Calculators (Электрокалькулятор)
+   Тёмная тема · Android/iOS PWA
+   Взято из калькулятора электромонтажа (pwa/index.html)
+   ========================================================= */
+
+*{box-sizing:border-box;margin:0;padding:0}
+
+:root{
+  /* Цветовая схема */
+  --bg:#0d0f13;              /* фон приложения */
+  --panel:#161920;           /* карточки/панели */
+  --panel2:#1b1f27;          /* второстепенные панели, инпуты */
+  --bdr:rgba(255,255,255,.09);   /* границы */
+  --bdr2:rgba(255,255,255,.05);  /* разделители */
+  --am:#f5b400;              /* акцент - янтарь */
+  --amb:#ffcf40;             /* акцент яркий */
+  --cop:#c17a4a;             /* медный - второстепенный акцент */
+  --txt:#eef1f5;             /* основной текст */
+  --mut:#8b93a1;             /* приглушённый текст */
+  --dng:#e2574c;             /* опасный/удаление */
+  --safe-b:env(safe-area-inset-bottom);
+}
+
+html,body{margin:0;padding:0;overflow-x:hidden;-webkit-text-size-adjust:100%}
+
+body{
+  background:radial-gradient(ellipse at top left,rgba(245,180,0,.06),transparent 45%),
+  radial-gradient(ellipse at bottom right,rgba(193,122,74,.07),transparent 50%),var(--bg);
+  color:var(--txt);
+  font-family:system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+  padding:16px 16px calc(72px + var(--safe-b));
+  min-height:100vh;min-height:100dvh;
+  -webkit-font-smoothing:antialiased;-webkit-tap-highlight-color:transparent;
+}
+
+.app{max-width:600px;margin:0 auto}
+
+/* ================= Splash ================= */
+.splash{
+  position:fixed;inset:0;z-index:9999;
+  background:radial-gradient(circle at 50% 42%, #1c2333 0%, #0d0f13 72%);
+  display:flex;flex-direction:column;
+  align-items:center;justify-content:center;
+  transition:opacity 1.4s ease;
+}
+.splash.hide{opacity:0;pointer-events:none}
+.splash .spl-dot{
+  width:14px;height:14px;border-radius:50%;
+  background:var(--am);
+  box-shadow:0 0 26px rgba(245,180,0,.8);
+  margin-bottom:26px;
+  animation:spl-pulse 1.6s ease-in-out infinite;
+}
+@keyframes spl-pulse{
+  0%,100%{transform:scale(.75);opacity:.55}
+  50%{transform:scale(1.15);opacity:1}
+}
+.splash .spl-title{
+  color:#f2f4f8;font-size:34px;font-weight:800;
+  letter-spacing:7px;padding-left:7px;text-align:center;
+  text-shadow:0 0 28px rgba(245,180,0,.5);
+}
+
+/* ================= Offline banner ================= */
+.offline-banner{
+  display:none;position:fixed;top:0;left:0;right:0;z-index:80;
+  background:var(--dng);color:#fff;text-align:center;
+  padding:8px;font-size:17px;font-weight:600;
+}
+.offline-banner.show{display:block}
+
+/* ================= Install banner (PWA) ================= */
+.install-banner{
+  display:none;position:fixed;bottom:calc(68px + var(--safe-b));left:12px;right:12px;
+  background:linear-gradient(135deg,var(--panel),var(--panel2));
+  border:1px solid var(--am);border-radius:14px;padding:16px;z-index:100;
+  box-shadow:0 8px 30px rgba(245,180,0,.2);
+}
+.install-banner.show{display:block}
+.install-banner p{font-size:19px;margin-bottom:12px}
+.install-banner .row{display:flex;gap:8px}
+.install-banner button{
+  flex:1;padding:12px;border:none;border-radius:8px;
+  font-size:19px;font-weight:700;cursor:pointer;
+}
+.inst{background:var(--am);color:#0d0f13}
+.inst2{background:var(--panel2);color:var(--mut);border:1px solid var(--bdr)!important}
+
+/* ================= Bottom navigation ================= */
+.bnav{
+  position:fixed;bottom:0;left:0;right:0;
+  background:var(--panel);border-top:1px solid var(--bdr);
+  display:flex;padding:6px 0 calc(6px + var(--safe-b));z-index:90;
+}
+.nbtn{
+  flex:1;background:none;border:none;color:var(--mut);
+  font-size:13px;font-weight:600;
+  display:flex;flex-direction:column;align-items:center;gap:3px;
+  padding:8px 0;cursor:pointer;transition:color .2s;
+}
+.nbtn.a{color:var(--am)}
+.nbtn svg{width:22px;height:22px}
+
+/* ================= Footer ================= */
+.foot{
+  margin:18px 0 86px;padding:14px 4px 0;border-top:1px solid var(--bdr);
+  text-align:center;color:var(--mut);font-size:14px;line-height:1.55;
+}
+.foot b{color:var(--txt)}
+.f-tel{color:var(--am);text-decoration:none;font-weight:600}
+.f-tel:active{opacity:.7}
+
+/* ================= Header ================= */
+header{margin-bottom:16px;text-align:center}
+.eye{
+  font-size:15px;letter-spacing:.12em;color:var(--cop);text-transform:uppercase;
+  margin:0 0 6px;display:flex;align-items:center;justify-content:center;gap:6px;font-weight:600;
+}
+.eye::before{content:"";width:5px;height:5px;border-radius:50%;background:var(--am);box-shadow:0 0 6px 1px var(--am)}
+h1{font-weight:800;font-size:clamp(29px,5vw,37px);line-height:1.2;margin:0 0 6px}
+.sub{color:var(--mut);font-size:17px;line-height:1.4;margin:0}
+
+/* ================= Decorative wire ================= */
+.wire{width:100%;height:10px;margin:14px 0;opacity:.5}
+
+/* ================= Panel ================= */
+.pnl{background:var(--panel);border:1px solid var(--bdr);border-radius:12px;padding:14px;margin-bottom:12px}
+
+/* ================= Toggle (Стандарт / Бетон) ================= */
+.tg-wrap{margin-bottom:14px}
+.tg{
+  display:grid;grid-template-columns:1fr 1fr;width:100%;
+  background:var(--panel);border:1px solid var(--bdr);border-radius:10px;padding:3px;position:relative;
+}
+.tg .th{
+  position:absolute;top:3px;left:3px;width:calc(50% - 3px);height:calc(100% - 6px);
+  background:linear-gradient(180deg,var(--amb),var(--am));border-radius:7px;
+  transition:transform .25s cubic-bezier(.65,0,.35,1);box-shadow:0 3px 10px rgba(245,180,0,.25);
+}
+.tg.on .th{transform:translateX(100%)}
+.mbtn{
+  position:relative;z-index:1;background:transparent;border:none;
+  padding:10px 8px;font-weight:700;font-size:19px;color:var(--mut);
+  cursor:pointer;border-radius:7px;transition:color .2s;
+}
+.mbtn.a{color:#0d0f13}
+.tg-h{font-size:15px;color:var(--mut);margin-top:5px}
+
+/* ================= Fields ================= */
+.f-label{display:block;font-size:16px;font-weight:600;color:var(--mut);margin:0 0 5px}
+.f{margin-bottom:12px}
+input[type="number"],input[type="text"],input[type="tel"]{
+  width:100%;background:var(--panel2);border:1px solid var(--bdr);border-radius:8px;
+  color:var(--txt);font-size:21px;padding:12px;transition:border-color .15s;
+}
+input:focus{outline:none;border-color:var(--am)}
+
+/* ================= Category (аккордеон) ================= */
+.cat{background:var(--panel);border:1px solid var(--bdr);border-radius:12px;margin-bottom:10px;overflow:hidden}
+.cat-h{
+  background:var(--panel2);padding:13px 14px;cursor:pointer;
+  display:flex;align-items:center;justify-content:space-between;
+  user-select:none;transition:background .2s;border-bottom:1px solid var(--bdr2);
+}
+.cat-h:active{background:rgba(245,180,0,.08)}
+.cat-h h2{font-size:17px;font-weight:700;display:flex;align-items:center;gap:6px}
+.cat-h .arr{font-size:13px;transition:transform .3s;color:var(--am)}
+.cat-h.a .arr{transform:rotate(180deg)}
+.cat-b{padding:0;max-height:0;overflow:hidden;transition:max-height .3s ease,padding .2s ease}
+.cat-b.open{padding:12px 14px;max-height:5000px}
+
+/* ================= Service item ================= */
+.svc{
+  display:grid;grid-template-columns:1fr 58px 72px;gap:8px;align-items:center;
+  padding:10px 0;border-bottom:1px dashed var(--bdr2);
+}
+.svc:last-child{border-bottom:none}
+.svc-n{font-weight:500;font-size:17px}
+.svc-u{font-size:13px;color:var(--mut)}
+.svc-p{font-size:15px;color:var(--cop)}
+.svc-p.c{color:var(--amb)}
+.qi{
+  width:100%;padding:8px 4px;background:var(--panel2);
+  border:1px solid var(--bdr);border-radius:6px;
+  color:var(--txt);font-size:19px;text-align:center;transition:border-color .15s;
+}
+.qi:focus{outline:none;border-color:var(--am)}
+.svc-t{font-size:16px;text-align:right;color:var(--amb);white-space:nowrap}
+
+/* ================= Category total ================= */
+.ctot{
+  background:rgba(245,180,0,.06);padding:10px 14px;
+  display:flex;justify-content:space-between;align-items:center;
+  font-weight:700;border-top:1px solid var(--bdr);font-size:16px;
+}
+.ctot .a{color:var(--amb);font-size:17px}
+
+/* ================= Grand total ================= */
+.gtot{
+  background:linear-gradient(165deg,var(--panel),var(--panel2));
+  border:1px solid var(--bdr);border-radius:12px;padding:16px;margin:14px 0;
+  display:flex;justify-content:space-between;align-items:center;
+}
+.gtot h2{font-size:19px;font-weight:800}
+.gtot .a{font-size:clamp(26px,5vw,34px);font-weight:800;color:var(--amb);text-shadow:0 0 12px rgba(255,207,64,.3)}
+
+/* ================= Тотальная сводка ================= */
+.totbox{border:1px solid var(--bdr);border-radius:12px;overflow:hidden;margin:14px 0;background:rgba(0,0,0,.08)}
+.totbox .ctot{border-top:none}
+.totbox .ctot:last-of-type{border-bottom:1px solid var(--bdr)}
+.totbox .gtot{border:none;border-radius:0;margin:0}
+
+/* ================= Buttons ================= */
+.acts{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px}
+.acts .bf{grid-column:1/-1}
+.btn{
+  padding:14px;border:none;border-radius:10px;font-size:19px;font-weight:700;
+  cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center;gap:6px;
+}
+.bp{background:linear-gradient(180deg,var(--amb),var(--am));color:#0d0f13}
+.bp:active{transform:scale(.97)}
+.bs{background:var(--panel2);border:1px solid var(--bdr);color:var(--txt)}
+.bs:active{border-color:var(--am)}
+.bd{background:rgba(226,87,76,.12);border:1px solid rgba(226,87,76,.3);color:var(--dng)}
+
+/* ================= Pages ================= */
+.pg{display:none}.pg.a{display:block}
+
+/* ================= History ================= */
+.hitem{
+  background:var(--panel);border:1px solid var(--bdr);border-radius:12px;
+  padding:14px;margin-bottom:10px;cursor:pointer;transition:all .2s;
+}
+.hitem:active{border-color:var(--am);transform:scale(.98)}
+.hitem-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
+.hitem-name{font-weight:700;font-size:19px}
+.hitem-date{font-size:15px;color:var(--mut)}
+.hitem-addr{font-size:16px;color:var(--mut);margin-bottom:4px}
+.hitem-total{font-size:24px;font-weight:800;color:var(--amb);text-align:right}
+.hitem-foot{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-top:8px}
+.hedit{
+  background:rgba(245,180,0,.12);border:1px solid rgba(245,180,0,.35);
+  color:var(--amb);padding:6px 12px;border-radius:8px;font-size:16px;
+  font-weight:600;cursor:pointer;white-space:nowrap;
+}
+.hitem-items{font-size:15px;color:var(--cop);margin-top:4px}
+.hempty{text-align:center;padding:40px 20px;color:var(--mut);font-size:19px}
+.hacts{display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap}
+.hbtns{margin-top:4px}
+.hdetail{padding:0}
+.hdetail .hrow{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px dashed var(--bdr2);font-size:17px}
+.hdetail .hrow:last-child{border-bottom:none}
+.hdetail .hrow .hn{flex:1;padding-right:8px}
+.hdetail .hrow .hq{color:var(--mut);margin-right:8px;font-family:monospace}
+.hdetail .hrow .ht{color:var(--amb);font-weight:600;white-space:nowrap}
+.hback{
+  background:none;border:none;color:var(--am);font-size:19px;font-weight:700;
+  cursor:pointer;margin-bottom:14px;display:flex;align-items:center;gap:6px;
+  padding:0;
+}
+.hdel{
+  background:rgba(226,87,76,.12);border:1px solid rgba(226,87,76,.3);
+  color:var(--dng);padding:6px 12px;border-radius:8px;font-size:16px;
+  font-weight:600;cursor:pointer;
+}
+
+/* ================= Edit picker modal ================= */
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:300;display:none;align-items:flex-end;justify-content:center}
+.modal.s{display:flex}
+.modal-box{
+  background:var(--panel);border:1px solid var(--bdr);border-radius:16px 16px 0 0;
+  max-width:600px;width:100%;max-height:72vh;overflow-y:auto;padding:16px;
+  padding-bottom:calc(16px + var(--safe-b));
+}
+.modal-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
+.modal-head h3{font-size:21px;font-weight:800}
+.modal-x{background:none;border:none;color:var(--mut);font-size:26px;cursor:pointer;padding:4px}
+.edit-row{padding:12px;border-bottom:1px solid var(--bdr2);cursor:pointer;display:flex;justify-content:space-between;align-items:center}
+.edit-row:active{background:rgba(245,180,0,.06)}
+.edit-info{font-size:17px;font-weight:600}
+.edit-meta{font-size:15px;color:var(--mut);margin-top:2px}
+.edit-total{color:var(--amb);font-weight:700;font-size:19px;white-space:nowrap;margin-left:8px}
+
+/* ================= Search ================= */
+.sw{margin-bottom:14px;position:relative}
+.sw input{
+  width:100%;background:var(--panel2);border:1px solid var(--bdr);
+  border-radius:10px;color:var(--txt);font-size:19px;padding:12px 12px 12px 38px;
+}
+.sw svg{position:absolute;left:12px;top:50%;transform:translateY(-50%);width:18px;height:18px;color:var(--mut)}
+
+/* ================= Category list ================= */
+.cl{list-style:none}
+.cl li{
+  padding:14px;border-bottom:1px solid var(--bdr2);cursor:pointer;
+  display:flex;align-items:center;gap:10px;font-size:19px;transition:background .2s;
+}
+.cl li:active{background:rgba(245,180,0,.06)}
+.cl li .ci{font-size:24px}
+.cl li .cc{margin-left:auto;font-size:15px;color:var(--mut);background:var(--panel2);padding:2px 8px;border-radius:10px}
+
+/* ================= Toast ================= */
+.toast{
+  position:fixed;bottom:calc(76px + var(--safe-b));left:50%;transform:translateX(-50%);
+  background:var(--panel);border:1px solid var(--am);border-radius:10px;
+  padding:12px 20px;font-size:17px;color:var(--amb);z-index:200;
+  opacity:0;transition:opacity .3s;pointer-events:none;
+}
+.toast.s{opacity:1}
+
+/* ================= Print ================= */
+@media print{
+  body{background:#fff;color:#000;padding:10px}
+  .cat,.pnl{background:#fff;border:1px solid #ddd}
+  .cat-h{background:#f5f5f5;color:#000}
+  .gtot{background:#f5f5f5;border:1px solid #ddd}
+  .gtot .a{color:#000;text-shadow:none}
+  .bnav,.install-banner,.acts,.tg-wrap,.sw,.offline-banner{display:none!important}
+  .cat-b{max-height:none!important;padding:12px!important}
+}
