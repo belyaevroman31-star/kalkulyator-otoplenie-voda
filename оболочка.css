@@ -172,11 +172,12 @@ input:focus{outline:none;border-color:var(--am)}
 
 /* ================= Service item ================= */
 .svc{
-  display:grid;grid-template-columns:1fr 58px 72px;gap:8px;align-items:center;
+  display:grid;grid-template-columns:minmax(0,1fr) auto auto auto;gap:8px;align-items:center;
   padding:10px 0;border-bottom:1px dashed var(--bdr2);
 }
+.svc>*{min-width:0}
 .svc:last-child{border-bottom:none}
-.svc-n{font-weight:500;font-size:17px}
+.svc-n{font-weight:500;font-size:17px;overflow-wrap:anywhere}
 .svc-u{font-size:13px;color:var(--mut)}
 .svc-p{font-size:15px;color:var(--cop)}
 .svc-p.c{color:var(--amb)}

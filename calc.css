@@ -101,9 +101,9 @@ ul.tips li::before{content:"•";color:var(--am);margin-right:8px;font-weight:70
 .chk input{width:22px;height:22px;accent-color:var(--amb);cursor:pointer;flex:none}
 
 /* ---------- Три колонки данных ---------- */
-.svc{grid-template-columns:1fr 75px 66px 99px}
+.svc{grid-template-columns:minmax(0,1fr) auto auto auto}
 .svc-h{
-  display:grid;grid-template-columns:1fr 75px 66px 99px;gap:8px;align-items:center;
+  display:grid;grid-template-columns:minmax(0,1fr) auto auto auto;gap:8px;align-items:center;
   padding:6px 0 4px;border-bottom:1px solid var(--bdr);
   font-size:12px;text-transform:uppercase;letter-spacing:.06em;color:var(--mut);font-weight:600;
 }
@@ -112,6 +112,16 @@ ul.tips li::before{content:"•";color:var(--am);margin-right:8px;font-weight:70
 .svc-q{font-size:16px;color:var(--mut);text-align:center;white-space:nowrap}
 .svc-q.lock{color:var(--amb);font-weight:700}
 .bwarn{font-size:16px;color:var(--cop);background:rgba(0,0,0,.18);border:1px solid var(--bdr);border-radius:6px;padding:8px;margin:4px 0}
+
+/* Автоадаптация под ширину экрана */
+@media (max-width:420px){
+  .svc,.svc-h{grid-template-columns:minmax(0,1fr) auto auto auto;gap:5px}
+  .svc-n{font-size:15px}
+  .svc-u{font-size:12px}
+  .svc-p{font-size:13px}
+  .svc-q,.svc-t{font-size:14px}
+  .svc{padding:9px 0}
+}
 
 /* ---------- Выпадающие пункты связок ---------- */
 .svc.bx{cursor:pointer;user-select:none}
