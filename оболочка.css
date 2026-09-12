@@ -45,18 +45,32 @@ body{
   transition:opacity 5s ease;
 }
 .splash.hide{opacity:0;pointer-events:none}
+.splash .spl-dot{
+  width:clamp(11px,3.4vw,16px);height:clamp(11px,3.4vw,16px);
+  border-radius:50%;
+  background:var(--am);
+  box-shadow:0 0 26px rgba(245,180,0,.8);
+  margin-bottom:clamp(18px,6vw,30px);
+  animation:spl-pulse 1.6s ease-in-out infinite;
+}
+@keyframes spl-pulse{
+  0%,100%{transform:scale(.75);opacity:.55}
+  50%{transform:scale(1.15);opacity:1}
+}
 .splash .spl-title{
-  color:var(--am);font-size:clamp(11px,min(4.6vw,3.2vh),23px);font-weight:800;
+  color:var(--am);font-size:clamp(13px,min(5.5vw,3.85vh),28px);font-weight:800;
   letter-spacing:clamp(1px,.42vw,3.5px);padding-left:clamp(1px,.42vw,3.5px);
   text-align:center;line-height:1.22;max-width:calc(100vw - 16px);
   white-space:nowrap;overflow:hidden;
   text-shadow:0 0 30px rgba(245,180,0,.55);
 }
 @media (max-width:340px){
-  .splash .spl-title{font-size:clamp(9px,3.9vw,15px);letter-spacing:clamp(1px,.35vw,2px)}
+  .splash .spl-title{font-size:clamp(11px,4.7vw,18px);letter-spacing:clamp(1px,.35vw,2px)}
+  .splash .spl-dot{width:clamp(10px,3vw,14px);height:clamp(10px,3vw,14px);margin-bottom:clamp(14px,5vw,22px)}
 }
 @media (max-height:430px){
-  .splash .spl-title{font-size:clamp(9px,min(2.8vw,2.8vh),17px);letter-spacing:clamp(1px,.28vw,2.5px);padding-left:clamp(1px,.28vw,2.5px)}
+  .splash .spl-title{font-size:clamp(11px,min(3.35vw,3.35vh),20px);letter-spacing:clamp(1px,.28vw,2.5px);padding-left:clamp(1px,.28vw,2.5px)}
+  .splash .spl-dot{width:clamp(9px,2.5vh,13px);height:clamp(9px,2.5vh,13px);margin-bottom:clamp(10px,3vh,18px)}
 }
 
 /* ================= Offline banner ================= */

@@ -1727,7 +1727,8 @@ document.addEventListener('DOMContentLoaded', function () {
   });
   document.getElementById('bClear').addEventListener('click', clearCalc);
   document.getElementById('bPrint').addEventListener('click', function () { window.print(); });
-  document.getElementById('hClear').addEventListener('click', function () {
+  const hClearEl = document.getElementById('hClear');
+  if (hClearEl) hClearEl.addEventListener('click', function () {
     if (!hist.length) return;
     hist = [];
     saveState();
