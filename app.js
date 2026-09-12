@@ -1758,6 +1758,19 @@ document.addEventListener('DOMContentLoaded', function () {
   setTimeout(function () {
     const s = document.getElementById('splash');
     if (!s) return;
+    const t = document.querySelector('.spl-title');
+    if (t) {
+      let fs = parseFloat(getComputedStyle(t).fontSize);
+      t.style.whiteSpace = 'nowrap';
+      while (t.scrollWidth > innerWidth - 8 && fs > 12) {
+        fs = Math.floor(fs * 0.93 * 10) / 10;
+        t.style.fontSize = fs + 'px';
+      }
+      if (t.scrollWidth > innerWidth - 8) {
+        t.style.whiteSpace = 'normal';
+        t.style.overflowWrap = 'anywhere';
+      }
+    }
     s.classList.add('hide');
     setTimeout(function () { s.remove(); }, 1400);
   }, 3600);
