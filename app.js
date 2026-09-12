@@ -1201,6 +1201,9 @@ function saveCalc() {
     items.push({ n: nm, q: q, p: bPrice(id), t: bPrice(id) * q });
   });
   if (st.sys === 'rad') radItemsArr().forEach(it => items.push(it));
+  const bl = selectBoiler(); if (bl) items.push({ n: bl.n, u: 'шт', q: 1, p: bl.price, t: bl.price });
+  const he = selectHeater(); if (he) items.push({ n: he.n, u: 'шт', q: 1, p: he.p, t: he.p });
+  workLines().forEach(w => items.push({ n: w.n, u: w.u, q: w.q, p: w.p, t: w.p * w.q, work: true }));
   const sysTxt = st.sys === 'floor' ? ' · тёплый пол' : (st.sys === 'rad' && radTotal() > 0 ? ' · радиаторы' : '');
   const bldrTxt = st.boiler ? ' · котёл 2-конт.' : st.boiler1 ? ' · котёл 1-конт. + бойлер' : '';
   const hmmTxt = st.hamam ? ' · хамам' : '';
@@ -1372,8 +1375,12 @@ function restoreStateUI(h) {
 
 function xlsDoc(h) {
   const rows = [['№', 'Наименование', 'Ед.', 'Кол-во', 'Цена', 'Сумма']];
-  h.items.forEach((it, i) => rows.push([i + 1, it.n, '', it.q, it.p, it.t]));
-  rows.push(['', 'ИТОГО', '', '', '', h.total]);
+  h.items.forEach((it, i) => rows.push([i + 1, it.n, it.u || '', it.q, it.p, it.t]));
+  const mat = h.items.filter(it => !it.work).reduce((s, it) => s + it.t, 0);
+  const wrk = h.items.filter(it => it.work).reduce((s, it) => s + it.t, 0);
+  rows.push(['', 'МАТЕРИАЛЫ', '', '', '', mat]);
+  rows.push(['', 'РАБОТЫ', '', '', '', wrk]);
+  rows.push(['', 'ИТОГО', '', '', '', mat + wrk]);
   const head = (h.client ? (h.client.fio + ' · ' + h.client.phone + ' · ' + h.client.addr) : '') + (h.date ? ' · ' + h.date : '');
   const w = [];
   for (let c = 0; c < rows[0].length; c++) w[c] = Math.max.apply(null, rows.map(r => (r[c] === undefined ? 0 : String(r[c]).length))) + 2;
@@ -1383,7 +1390,8 @@ function xlsDoc(h) {
     '<tr><td colspan="6" style="border:1px solid #000;padding:4px 6px;font-weight:bold;font-size:14px">' + esc(h.name) + '</td></tr>';
   html += '<tr>' + rows[0].map(c => '<td style="border:1px solid #000;padding:4px 6px;font-weight:bold;background:#eee">' + esc(c) + '</td>').join('') + '</tr>';
   rows.slice(1).forEach(r => {
-    html += '<tr>' + r.map((c, ci) => cell(esc(c), ci === 5 && r[0] === '' && r[1] === 'ИТОГО')).join('') + '</tr>';
+    const sumRow = r[0] === '' && (r[1] === 'МАТЕРИАЛЫ' || r[1] === 'РАБОТЫ' || r[1] === 'ИТОГО');
+    html += '<tr>' + r.map((c, ci) => cell(esc(c), sumRow ? (ci === 1 || ci === 5) : (ci === 5 && r[1] === 'ИТОГО'))).join('') + '</tr>';
   });
   html += '</table>' +
     '<style>table{border-collapse:collapse} .x, td{font-family:Calibri,Arial,sans-serif;font-size:11pt;vertical-align:middle}</style>';

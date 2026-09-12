@@ -46,10 +46,11 @@ body{
 }
 .splash.hide{opacity:0;pointer-events:none}
 .splash .spl-dot{
-  width:14px;height:14px;border-radius:50%;
+  width:clamp(11px,3.4vw,16px);height:clamp(11px,3.4vw,16px);
+  border-radius:50%;
   background:var(--am);
   box-shadow:0 0 26px rgba(245,180,0,.8);
-  margin-bottom:26px;
+  margin-bottom:clamp(18px,6vw,30px);
   animation:spl-pulse 1.6s ease-in-out infinite;
 }
 @keyframes spl-pulse{
@@ -57,9 +58,14 @@ body{
   50%{transform:scale(1.15);opacity:1}
 }
 .splash .spl-title{
-  color:#f2f4f8;font-size:34px;font-weight:800;
-  letter-spacing:7px;padding-left:7px;text-align:center;
+  color:#f2f4f8;font-size:clamp(17px,7vw,34px);font-weight:800;
+  letter-spacing:clamp(2px,.9vw,7px);padding-left:clamp(2px,.9vw,7px);
+  text-align:center;line-height:1.25;max-width:94vw;overflow-wrap:anywhere;
   text-shadow:0 0 28px rgba(245,180,0,.5);
+}
+@media (max-height:430px){
+  .splash .spl-title{font-size:clamp(15px,4.5vh,26px);letter-spacing:clamp(1px,.5vh,4px)}
+  .splash .spl-dot{width:clamp(9px,2.5vh,13px);height:clamp(9px,2.5vh,13px);margin-bottom:clamp(10px,3vh,18px)}
 }
 
 /* ================= Offline banner ================= */

@@ -115,12 +115,16 @@ ul.tips li::before{content:"•";color:var(--am);margin-right:8px;font-weight:70
 
 /* Автоадаптация под ширину экрана */
 @media (max-width:420px){
-  .svc,.svc-h{grid-template-columns:minmax(0,1fr) auto auto auto;gap:5px}
+  .svc-h{display:none}
+  .svc{grid-template-columns:minmax(0,1fr) auto auto;gap:2px 8px;padding:9px 0}
+  .svc>div:first-child{grid-column:1/-1;grid-row:1}
+  .svc .svc-p{grid-column:1;grid-row:2;font-size:12.5px;color:var(--mut);text-align:left}
+  .svc .svc-q{grid-column:2;grid-row:2;font-size:14px}
+  .svc .svc-t{grid-column:3;grid-row:2;font-size:15px;text-align:right}
+  .svc .svc-d{grid-column:1/-1;grid-row:3}
   .svc-n{font-size:15px}
   .svc-u{font-size:12px}
-  .svc-p{font-size:13px}
-  .svc-q,.svc-t{font-size:14px}
-  .svc{padding:9px 0}
+  .svc>.qi{grid-column:2;grid-row:2;padding:5px 4px;font-size:16px}
 }
 
 /* ---------- Выпадающие пункты связок ---------- */
