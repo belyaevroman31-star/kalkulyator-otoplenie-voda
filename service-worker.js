@@ -1,6 +1,6 @@
 self.addEventListener('install', function (e) {
   e.waitUntil(
-    caches.open('ov-v1').then(function (c) {
+    caches.open('ov-v2').then(function (c) {
       return c.addAll([
         './',
         'index.html',
@@ -23,7 +23,7 @@ self.addEventListener('install', function (e) {
 self.addEventListener('activate', function (e) {
   e.waitUntil(
     caches.keys().then(function (keys) {
-      return Promise.all(keys.filter(function (k) { return k !== 'ov-v1'; }).map(function (k) { return caches.delete(k); }));
+      return Promise.all(keys.filter(function (k) { return k !== 'ov-v2'; }).map(function (k) { return caches.delete(k); }));
     })
   );
   self.clients.claim();
@@ -31,17 +31,32 @@ self.addEventListener('activate', function (e) {
 
 self.addEventListener('fetch', function (e) {
   if (e.request.method !== 'GET') return;
+  const url = new URL(e.request.url);
+  if (e.request.mode === 'navigate') {
+    e.respondWith(
+      fetch(e.request).then(function (resp) {
+        if (resp && resp.status === 200) {
+          const copy = resp.clone();
+          caches.open('ov-v2').then(function (c) { c.put('./index.html', copy); });
+        }
+        return resp;
+      }).catch(function () {
+        return caches.match('./index.html');
+      })
+    );
+    return;
+  }
   e.respondWith(
     caches.match(e.request).then(function (hit) {
       if (hit) return hit;
       return fetch(e.request).then(function (resp) {
         if (resp && resp.status === 200 && (resp.type === 'basic' || resp.type === 'cors')) {
           const copy = resp.clone();
-          caches.open('ov-v1').then(function (c) { c.put(e.request, copy); });
+          caches.open('ov-v2').then(function (c) { c.put(e.request, copy); });
         }
         return resp;
       }).catch(function () {
-        const url = new URL(e.request.url);
+        const url2 = new URL(e.request.url);
         if (e.request.mode === 'navigate') return caches.match('./index.html');
         return new Response('', { status: 408, statusText: 'Offline' });
       });
