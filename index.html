@@ -3,22 +3,26 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#0d0f13">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="Отопление и вода">
 <link rel="manifest" href="manifest.webmanifest">
-<link rel="icon" type="image/png" sizes="64x64" href="icon-64.png">
+<meta name="theme-color" content="#0d0f13">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Отопление и вода">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<link rel="icon" type="image/png" href="icon-192.png">
 <link rel="apple-touch-icon" href="icon-180.png">
 <title>Калькулятор системы отопления и водоснабжения</title>
 <link rel="stylesheet" href="оболочка.css">
 <link rel="stylesheet" href="calc.css">
+<style>
+.git-hint{font-size:12px;line-height:1.5;color:var(--mut);margin:8px 2px 0}
+.git-hint a{color:var(--amb)}
+</style>
 </head>
 <body>
 
 <!-- Splash -->
 <div class="splash" id="splash">
-  <div class="spl-dot"></div>
   <p class="spl-title">BELYAEV_PROJECT</p>
 </div>
 
@@ -241,11 +245,11 @@
 
     <div class="acts">
       <button class="btn bp" id="bSave">Сохранить</button>
-      <button class="btn bd bf" id="bGitSave">Сохранить + в репозиторий</button>
       <button class="btn bs" id="bClear">Очистить</button>
       <button class="btn bd bf" id="bPrint">Печать сметы</button>
+      <button class="btn bp" id="bGitSave">Сохранить + в репозиторий</button>
     </div>
-    <div class="hint git-hint">Кнопка «+ в репозиторий» отправляет смету (.xls) в указанный репозиторий на GitHub. Настройки — на странице «Справка».</div>
+    <div class="git-hint">Для отправки смет в GitHub-репозиторий укажите токен и данные на странице «Справка» (блок «Синхронизация смет»).</div>
   </main>
 
   <!-- ========== Страница: Каталог ========== -->
@@ -290,12 +294,25 @@
       </ul>
     </div>
     <div class="pnl">
-      <p class="grpname">Синхронизация смет с репозиторием GitHub</p>
-      <p class="hint">Сметы (.xls) сохраняются в ваш репозиторий-хранилище (папка smeti/). Токен хранится только на этом устройстве и никуда не отправляется, кроме GitHub API.</p>
-      <input class="qi" id="gitToken" type="password" placeholder="GitHub Personal Access Token (repo)">
-      <input class="qi" id="gitUser" type="text" placeholder="Имя пользователя GitHub">
-      <input class="qi" id="gitRepo" type="text" placeholder="Репозиторий для смет, напр. smeti-otoplenie">
-      <div class="hint" id="gitMsg"></div>
+      <p class="grpname">Синхронизация смет</p>
+      <div class="frow2">
+        <div>
+          <label class="f-label">Токен GitHub</label>
+          <input class="qi" id="gitToken" type="password" autocomplete="off" placeholder="ghp_…">
+        </div>
+      </div>
+      <div class="frow2">
+        <div>
+          <label class="f-label">Пользователь GitHub</label>
+          <input class="qi" id="gitUser" type="text" autocomplete="off" placeholder="username">
+        </div>
+        <div>
+          <label class="f-label">Репозиторий</label>
+          <input class="qi" id="gitRepo" type="text" autocomplete="off" placeholder="repo-name">
+        </div>
+      </div>
+      <div class="hint">Сметы сохраняются в каталог <b>smeti/</b> вашего репозитория через API GitHub (токен хранится только на этом устройстве).</div>
+      <div class="hint" id="gitMsg" style="font-weight:700">&nbsp;</div>
     </div>
   </main>
 
@@ -344,19 +361,28 @@
 <script src="boilers_local.js"></script>
 <script src="app.js" defer></script>
 <script>
-if ('serviceWorker' in navigator && location.protocol.indexOf('http') === 0) {
-  navigator.serviceWorker.register('./service-worker.js').catch(function () {});
-}
-window.addEventListener('DOMContentLoaded', function () {
-  var ids = ['gitToken', 'gitUser', 'gitRepo'];
-  var keys = ['ov_gh_token', 'ov_gh_user', 'ov_gh_repo'];
-  ids.forEach(function (id, i) {
+(function () {
+  function bindSetting(id, key) {
     var el = document.getElementById(id);
     if (!el) return;
-    el.value = localStorage.getItem(keys[i]) || '';
-    el.addEventListener('change', function () { localStorage.setItem(keys[i], this.value.trim()); });
+    el.value = localStorage.getItem(key) || '';
+    el.addEventListener('input', function () {
+      try { localStorage.setItem(key, this.value.trim()); } catch (e) {}
+    });
+  }
+  bindSetting('gitToken', 'ov_gh_token');
+  bindSetting('gitUser', 'ov_gh_user');
+  bindSetting('gitRepo', 'ov_gh_repo');
+})();
+</script>
+<script>
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('service-worker.js').then(function () {
+    console.log('SW registered');
+  }).catch(function (e) {
+    console.warn('SW error', e);
   });
-});
+}
 </script>
 </body>
 </html>

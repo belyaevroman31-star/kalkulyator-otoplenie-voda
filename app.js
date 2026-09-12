@@ -1772,7 +1772,7 @@ document.addEventListener('DOMContentLoaded', function () {
       }
     }
     s.classList.add('hide');
-    setTimeout(function () { s.remove(); }, 1400);
+    setTimeout(function () { s.remove(); }, 5200);
   }, 3600);
 
   /* Offline / online */
